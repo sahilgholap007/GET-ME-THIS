@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Connection Tester</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+      }
+
+      .config-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .config-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .config-label {
+        font-weight: 600;
+        color: #555;
+        width: 120px;
+      }
+
+      .config-value {
+        font-family: "Courier New", monospace;
+        color: #667eea;
+        background: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        flex: 1;
+      }
+
+      .btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-right: 10px;
+      }
+
+      .btn:hover {
+        background: #5568d3;
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .btn-disconnect {
+        background: #e74c3c;
+      }
+
+      .btn-disconnect:hover {
+        background: #c0392b;
+      }
+
+      .btn-clear {
+        background: #95a5a6;
+      }
+
+      .btn-clear:hover {
+        background: #7f8c8d;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .status-disconnected {
+        background: #fee;
+        color: #c0392b;
+      }
+
+      .status-connecting {
+        background: #fef3cd;
+        color: #856404;
+      }
+
+      .status-connected {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .indicator-disconnected {
+        background: #c0392b;
+      }
+
+      .indicator-connecting {
+        background: #f39c12;
+        animation: pulse 1s infinite;
+      }
+
+      .indicator-connected {
+        background: #27ae60;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .log-container {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        max-height: 400px;
+        overflow-y: auto;
+        margin-top: 20px;
+      }
+
+      .log-entry {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .log-success {
+        color: #4ec9b0;
+      }
+
+      .log-error {
+        color: #f48771;
+      }
+
+      .log-info {
+        color: #569cd6;
+      }
+
+      .log-warning {
+        color: #dcdcaa;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .stat-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #667eea;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔌 WebSocket Connection Tester</h1>
+      <p class="subtitle">
+        Test real-time connection to the backend WebSocket server
+      </p>
+
+      <div class="config-section">
+        <h3 style="margin-bottom: 15px; color: #333">Configuration</h3>
+        <div class="config-item">
+          <span class="config-label">Host:</span>
+          <input
+            type="text"
+            id="wsHost"
+            class="config-value"
+            value="36d21d158e5d.ngrok-free.app"
+          />
+        </div>
+        <div class="config-item">
+          <span class="config-label">Session ID:</span>
+          <span class="config-value" id="sessionId">test-session-123</span>
+        </div>
+        <div class="config-item">
+          <span class="config-label">Full URL:</span>
+          <span class="config-value" id="fullUrl">-</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px">
+        <span class="status status-disconnected" id="status">
+          <span
+            class="status-indicator indicator-disconnected"
+            id="indicator"
+          ></span>
+          <span id="statusText">Disconnected</span>
+        </span>
+      </div>
+
+      <div>
+        <button class="btn" id="connectBtn" onclick="connect()">Connect</button>
+        <button
+          class="btn btn-disconnect"
+          id="disconnectBtn"
+          onclick="disconnect()"
+          disabled
+        >
+          Disconnect
+        </button>
+        <button class="btn btn-clear" onclick="clearLog()">Clear Log</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="messageCount">0</div>
+          <div class="stat-label">Messages Received</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="progress">0%</div>
+          <div class="stat-label">Latest Progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="uptime">0s</div>
+          <div class="stat-label">Connection Time</div>
+        </div>
+      </div>
+
+      <div class="log-container" id="log">
+        <div class="log-entry log-info">
+          📋 Ready to connect. Click "Connect" to start.
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let ws = null;
+      let messageCount = 0;
+      let connectTime = null;
+      let uptimeInterval = null;
+
+      function updateFullUrl() {
+        const host = document.getElementById("wsHost").value;
+        const sessionId = document.getElementById("sessionId").textContent;
+        const protocol =
+          host.includes("ngrok") || !host.includes("localhost")
+            ? "wss:"
+            : "ws:";
+        const url = `${protocol}//${host}/ws/shopforme/validation/${sessionId}/`;
+        document.getElementById("fullUrl").textContent = url;
+        return url;
+      }
+
+      function updateStatus(status, text) {
+        const statusEl = document.getElementById("status");
+        const indicatorEl = document.getElementById("indicator");
+        const statusTextEl = document.getElementById("statusText");
+
+        statusEl.className = `status status-${status}`;
+        indicatorEl.className = `status-indicator indicator-${status}`;
+        statusTextEl.textContent = text;
+      }
+
+      function log(message, type = "info") {
+        const logEl = document.getElementById("log");
+        const entry = document.createElement("div");
+        entry.className = `log-entry log-${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logEl.appendChild(entry);
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      function clearLog() {
+        document.getElementById("log").innerHTML =
+          '<div class="log-entry log-info">📋 Log cleared.</div>';
+      }
+
+      function updateUptime() {
+        if (!connectTime) return;
+        const seconds = Math.floor((Date.now() - connectTime) / 1000);
+        document.getElementById("uptime").textContent = `${seconds}s`;
+      }
+
+      function connect() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          log("⚠️  Already connected", "warning");
+          return;
+        }
+
+        const url = updateFullUrl();
+        log(`🔌 Connecting to ${url}...`, "info");
+        updateStatus("connecting", "Connecting...");
+
+        try {
+          ws = new WebSocket(url);
+
+          ws.onopen = () => {
+            log("✅ WebSocket connected successfully!", "success");
+            updateStatus("connected", "Connected");
+            document.getElementById("connectBtn").disabled = true;
+            document.getElementById("disconnectBtn").disabled = false;
+            connectTime = Date.now();
+            uptimeInterval = setInterval(updateUptime, 1000);
+          };
+
+          ws.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              messageCount++;
+              document.getElementById("messageCount").textContent =
+                messageCount;
+
+              log(`📨 Message #${messageCount}: ${data.type}`, "success");
+
+              if (data.message) {
+                log(`   ${data.message}`, "info");
+              }
+
+              if (data.progress !== undefined) {
+                document.getElementById(
+                  "progress"
+                ).textContent = `${data.progress}%`;
+                log(`   Progress: ${data.progress}%`, "info");
+              }
+
+              if (data.step) {
+                log(`   Step: ${data.step}`, "info");
+              }
+
+              log(`   Raw: ${JSON.stringify(data, null, 2)}`, "info");
+            } catch (error) {
+              log(`⚠️  Failed to parse message: ${error.message}`, "warning");
+              log(`   Raw: ${event.data}`, "info");
+            }
+          };
+
+          ws.onerror = (error) => {
+            log("❌ WebSocket error occurred", "error");
+            log(
+              "💡 Check: Backend running? ngrok active? Redis running?",
+              "warning"
+            );
+            updateStatus("disconnected", "Error");
+          };
+
+          ws.onclose = () => {
+            log("🔌 WebSocket connection closed", "info");
+            updateStatus("disconnected", "Disconnected");
+            document.getElementById("connectBtn").disabled = false;
+            document.getElementById("disconnectBtn").disabled = true;
+            if (uptimeInterval) {
+              clearInterval(uptimeInterval);
+              uptimeInterval = null;
+            }
+          };
+        } catch (error) {
+          log(`❌ Connection failed: ${error.message}`, "error");
+          updateStatus("disconnected", "Failed");
+        }
+      }
+
+      function disconnect() {
+        if (ws) {
+          log("👋 Closing connection...", "info");
+          ws.close();
+        }
+      }
+
+      // Update URL on page load
+      updateFullUrl();
+
+      // Update URL when host changes
+      document
+        .getElementById("wsHost")
+        .addEventListener("input", updateFullUrl);
+    </script>
+  </body>
+</html>

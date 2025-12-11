@@ -1,0 +1,23 @@
+.font-geist-light (font-weight: 300)
+.font-geist-normal (font-weight: 400)
+.font-geist-medium (font-weight: 500)
+.font-geist-semibold (font-weight: 600)
+.font-geist-bold (font-weight: 700)
+.font-geist-mono (monospace variant)
+Monument Font Classes:
+
+.font-monument-ultralight (font-weight: 200)
+.font-monument-regular (font-weight: 400)
+.font-monument-ultrabold (font-weight: 800)
+SF Pro Display Font Classes:
+
+.font-sf-pro-display-thin-italic (font-weight: 100, italic)
+.font-sf-pro-display-regular (font-weight: 400)
+.font-sf-pro-display-medium (font-weight: 500)
+.font-sf-pro-display-bold (font-weight: 700)
+These classes use CSS variables defined at the top of the file:
+
+--font-geist-sans for Geist sans-serif
+--font-geist-mono for Geist monospace
+--font-monument for Monument Extended
+--font-sf-pro-display for SF Pro Display

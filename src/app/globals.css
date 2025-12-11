@@ -1,0 +1,434 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "keen-slider/keen-slider.min.css";
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+
+  html {
+    @apply overflow-x-hidden;
+    scroll-behavior: smooth;
+  }
+}
+
+:root {
+  /* Geist Font Variables */
+  --font-geist-sans: "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-geist-mono: "Geist Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+
+  /* Monument Font (for non-admin pages) */
+  --font-monument: "Monument Extended", system-ui, sans-serif;
+
+  /* SF Pro Display Font */
+  --font-sf-pro-display: "SF Pro Display", system-ui, sans-serif;
+
+  /* Admin-specific color palette */
+  --admin-bg: #fafbfc;
+  --admin-surface: #ffffff;
+  --admin-surface-hover: #f8fafc;
+  --admin-border: #e2e8f0;
+  --admin-border-light: #f1f5f9;
+  --admin-text-primary: #0f172a;
+  --admin-text-secondary: #475569;
+  --admin-text-muted: #64748b;
+  --admin-text-light: #94a3b8;
+  --admin-accent: #3b82f6;
+  --admin-accent-light: #dbeafe;
+  --admin-success: #10b981;
+  --admin-success-light: #d1fae5;
+  --admin-warning: #f59e0b;
+  --admin-warning-light: #fef3c7;
+  --admin-error: #ef4444;
+  --admin-error-light: #fee2e2;
+  --admin-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --admin-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --admin-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --admin-radius: 0.75rem;
+  --admin-radius-sm: 0.5rem;
+  --admin-radius-lg: 1rem;
+
+  /* Default theme variables */
+  --background: #ffffff;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #171717;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer utilities {
+
+  /* Admin-specific utilities */
+  .admin-surface {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border-light);
+    border-radius: var(--admin-radius);
+    box-shadow: var(--admin-shadow);
+  }
+
+  .admin-surface-hover {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .admin-surface-hover:hover {
+    background: var(--admin-surface-hover);
+    box-shadow: var(--admin-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .admin-button-primary {
+    background: var(--admin-accent);
+    color: white;
+    border: 1px solid var(--admin-accent);
+    border-radius: var(--admin-radius-sm);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .admin-button-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    box-shadow: var(--admin-shadow-md);
+  }
+
+  .admin-button-secondary {
+    background: var(--admin-surface);
+    color: var(--admin-text-secondary);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-sm);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .admin-button-secondary:hover {
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-accent);
+    color: var(--admin-accent);
+    box-shadow: var(--admin-shadow);
+  }
+
+  .admin-input {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-sm);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease-in-out;
+    color: var(--admin-text-primary);
+  }
+
+  .admin-input:focus {
+    outline: none;
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px var(--admin-accent-light);
+  }
+
+  .admin-input::placeholder {
+    color: var(--admin-text-light);
+  }
+
+  .admin-badge-success {
+    background: var(--admin-success-light);
+    color: var(--admin-success);
+    border: 1px solid var(--admin-success);
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .admin-badge-warning {
+    background: var(--admin-warning-light);
+    color: var(--admin-warning);
+    border: 1px solid var(--admin-warning);
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .admin-badge-error {
+    background: var(--admin-error-light);
+    color: var(--admin-error);
+    border: 1px solid var(--admin-error);
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .admin-badge-neutral {
+    background: var(--admin-border-light);
+    color: var(--admin-text-muted);
+    border: 1px solid var(--admin-border);
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* Geist Font Utilities */
+  .font-geist-light {
+    font-family: var(--font-geist-sans);
+    font-weight: 300;
+  }
+
+  .font-geist-normal {
+    font-family: var(--font-geist-sans);
+    font-weight: 400;
+  }
+
+  .font-geist-medium {
+    font-family: var(--font-geist-sans);
+    font-weight: 500;
+  }
+
+  .font-geist-semibold {
+    font-family: var(--font-geist-sans);
+    font-weight: 600;
+  }
+
+  .font-geist-bold {
+    font-family: var(--font-geist-sans);
+    font-weight: 700;
+  }
+
+  .font-geist-mono {
+    font-family: var(--font-geist-mono);
+  }
+
+  /* Monument Font Utilities (for non-admin pages) */
+  .font-monument-ultralight {
+    font-family: var(--font-monument);
+    font-weight: 200;
+  }
+
+  .font-monument-regular {
+    font-family: var(--font-monument);
+    font-weight: 400;
+  }
+
+  .font-monument-ultrabold {
+    font-family: var(--font-monument);
+    font-weight: 800;
+  }
+
+  /* SF Pro Display Font Utilities */
+  .font-sf-pro-display-thin-italic {
+    font-family: var(--font-sf-pro-display);
+    font-weight: 100;
+    font-style: italic;
+  }
+
+  .font-sf-pro-display-regular {
+    font-family: var(--font-sf-pro-display);
+    font-weight: 400;
+  }
+
+  .font-sf-pro-display-medium {
+    font-family: var(--font-sf-pro-display);
+    font-weight: 500;
+  }
+
+  .font-sf-pro-display-bold {
+    font-family: var(--font-sf-pro-display);
+    font-weight: 700;
+  }
+
+  /* Admin Animations */
+  .admin-fade-in {
+    animation: adminFadeIn 0.3s ease-out forwards;
+  }
+
+  .admin-slide-up {
+    animation: adminSlideUp 0.4s ease-out forwards;
+  }
+
+  .admin-scale-in {
+    animation: adminScaleIn 0.2s ease-out forwards;
+  }
+
+  /* Admin Scrollbar */
+  .admin-dashboard ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .admin-dashboard ::-webkit-scrollbar-track {
+    background: var(--admin-border-light);
+    border-radius: 3px;
+  }
+
+  .admin-dashboard ::-webkit-scrollbar-thumb {
+    background: var(--admin-border);
+    border-radius: 3px;
+  }
+
+  .admin-dashboard ::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-text-light);
+  }
+
+  .animate-scroll-loop-left {
+    animation: scroll-loop-left 60s linear infinite;
+  }
+
+  .animate-scroll-loop-right {
+    animation: scroll-loop-right 60s linear infinite;
+  }
+}
+
+/* Admin Animations */
+@keyframes adminFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scroll-loop-left {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes scroll-loop-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "user_data": {
+    "id": 2,
+    "email": "gholapsahil007@gmail.com",
+    "first_name": "sahil",
+    "last_name": "gholap",
+    "is_active": true,
+    "addresses": [
+      {
+        "full_name": "Sahil Ravindra Gholap",
+        "address_line1": "ad asd asd a asd asd as",
+        "city": "bhiwandi",
+        "country": "India"
+      },
+      {
+        "full_name": "adsfasd",
+        "address_line1": "asd",
+        "city": "adsf",
+        "country": "adsf"
+      }
+    ],
+    "wallet_balance": "27.16"
+  }
+}
